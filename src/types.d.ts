@@ -3,4 +3,5 @@ declare type Contact = {
   name: string;
   email: string;
   phone: string;
+  isInEditingMode?: boolean;
 };

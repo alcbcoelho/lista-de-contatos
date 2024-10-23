@@ -24,7 +24,7 @@ const initialState: initialState = {
 };
 
 const fieldsSlice = createSlice({
-  name: 'registrationFields',
+  name: 'fields',
   initialState,
   reducers: {
     changeValue: (

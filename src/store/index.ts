@@ -1,11 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
+
 import { contactsReducer } from './contactsSlice';
 import { fieldsReducer } from './fieldsSlice';
+import { snackbarReducer } from './snackbarSlice';
 
 const store = configureStore({
   reducer: {
     contactList: contactsReducer,
-    fields: fieldsReducer
+    fields: fieldsReducer,
+    snackbar: snackbarReducer
   }
 });
 

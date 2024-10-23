@@ -12,6 +12,18 @@ const initialState: initialState = {
       name: 'Fred Flinstone',
       email: 'fred.flinstone@mail.com',
       phone: '(69) 93925-9526'
+    },
+    {
+      id: 2,
+      name: 'Shrek',
+      email: 'shrek@mail.com',
+      phone: '(68) 98414-9005'
+    },
+    {
+      id: 3,
+      name: 'Jimmy Neutron',
+      email: 'jimmy.neutron@mail.com',
+      phone: '(82) 97994-1391'
     }
   ]
 };
@@ -30,7 +42,6 @@ const contactsSlice = createSlice({
     },
     removeContact: (state, action: PayloadAction<number>) => {
       state.items = state.items.filter((c) => c.id !== action.payload);
-      //   state.items.splice(action.payload - 1, 1);
     }
   }
 });

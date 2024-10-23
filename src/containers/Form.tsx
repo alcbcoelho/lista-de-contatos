@@ -5,45 +5,69 @@ import styled from 'styled-components';
 import { RootState } from '../store';
 import { addContact } from '../store/contactsSlice';
 import { changeValue } from '../store/fieldsSlice';
-import Input from '../components/Input';
+
+import Input, { InputStyle } from '../components/Input';
+
 import { inputs } from '../utils/data';
+import { breakpoints } from '../global-style';
 
 const FormStyle = styled.form`
+  margin-bottom: 16px;
+
   h2 {
     margin-bottom: 16px;
     font-size: 1.25rem;
+
+    @media screen and (max-width: ${breakpoints.maxSmallTablet}) {
+      text-align: center;
+    }
+  }
+
+  @media screen and (min-width: ${breakpoints.minSmallTablet}) and (max-width: ${breakpoints.maxSmallTablet}) {
+    button {
+      margin-top: 16px;
+    }
   }
 `;
 
 const FormContainer = styled.div`
   display: flex;
   justify-content: space-between;
+
+  @media screen and (max-width: ${breakpoints.maxMobile}) {
+    flex-direction: column;
+    gap: 16px;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  @media screen and (min-width: ${breakpoints.minSmallTablet}) and (max-width: ${breakpoints.maxSmallTablet}) {
+    display: block;
+    text-align: center;
+  }
 `;
 
 const InputFlexContainer = styled.div`
   display: flex;
   gap: 12px;
-  // display: grid;
-  // grid-template-columns: 30% 30% 30% 10%;
-`;
 
-// const inputs: InputProps[] = [
-//   {
-//     id: 'name',
-//     label: 'Nome',
-//     type: 'text'
-//   },
-//   {
-//     id: 'email',
-//     label: 'Email',
-//     type: 'email'
-//   },
-//   {
-//     id: 'phone',
-//     label: 'Telefone',
-//     type: 'tel'
-//   }
-// ];
+  @media screen and (max-width: ${breakpoints.maxMobile}) {
+    gap: 16px;
+    flex-direction: column;
+    align-items: center;
+
+    ${InputStyle} {
+      input {
+        display: block;
+      }
+    }
+  }
+
+  @media screen and (min-width: ${breakpoints.minSmallTablet}) and (max-width: ${breakpoints.maxLargeTablet}) {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+`;
 
 export default function Form() {
   const dispatch = useDispatch();
@@ -51,15 +75,19 @@ export default function Form() {
   const inputValues = useSelector(
     (state: RootState) => state.fields.registration
   );
+  const isThereAContactBeingEdited = useSelector((state: RootState) =>
+    state.contactList.items.map((i) => i.isInEditingMode).find((i) => i)
+  );
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { name, email, phone } = inputValues;
+    const highestId = contacts.map((c) => c.id).sort((a, b) => b - a)[0];
 
     dispatch(
       addContact({
-        id: contacts.length + 1,
+        id: highestId ? highestId + 1 : 1,
         name,
         email,
         phone
@@ -83,10 +111,12 @@ export default function Form() {
       <FormContainer>
         <InputFlexContainer>
           {inputs.map((i) => (
-            <Input key={i.id} {...i} />
+            <Input key={i.id} {...i} disabled={isThereAContactBeingEdited} />
           ))}
         </InputFlexContainer>
-        <button type="submit">Adicionar</button>
+        <button type="submit" disabled={isThereAContactBeingEdited}>
+          Adicionar
+        </button>
       </FormContainer>
     </FormStyle>
   );
